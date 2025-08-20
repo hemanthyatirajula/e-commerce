@@ -1,0 +1,66 @@
+/* === Card Container === */
+.item {
+  width: 230px;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  text-align: center;
+  margin: 10px;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* === Product Image === */
+.item img {
+  max-width: 100%;
+  height: 250px;
+  aspect-ratio: 4 / 5; /* keeps a clean aspect ratio */
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.item img:hover {
+  transform: scale(1.05);
+}
+
+/* === Product Name === */
+.item p {
+  margin: 10px 0 6px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #222;
+}
+
+/* === Prices Container === */
+.item-prices {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* === New Price === */
+.item-price-new {
+  color: #d10024; /* red like discounts */
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* === Old Price (Strikethrough) === */
+.item-price-old {
+  color: #888;
+  text-decoration: line-through;
+  font-size: 14px;
+}

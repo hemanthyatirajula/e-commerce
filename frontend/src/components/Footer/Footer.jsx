@@ -1,0 +1,43 @@
+import React from 'react';
+import './Footer.css';
+import footer_logo from '../Assets/logo.png';
+import instagram_icon from '../Assets/instagram.jpg';
+import pintester_icon from '../Assets/telgram.jpg';
+import whatsapp_icon from '../Assets/whatsapp.jpg';
+
+const Footer = () => {
+  return (
+    <div className="footer">
+      <div className="footer-logo">
+        <img src={footer_logo} alt="logo" />
+        <p>The Curiosity Corner</p>
+      </div>
+
+      <ul className="footer-links">
+        <li>Company</li>
+        <li>Products</li>
+        <li>Offices</li>
+        <li>About</li>
+      </ul>
+
+      <div className="footer-social-icon">
+        <div className="footer-icons-container">
+          <img src={instagram_icon} alt="instagram" />
+        </div>
+        <div className="footer-icons-container">
+          <img src={pintester_icon} alt="pinterest" />
+        </div>
+        <div className="footer-icons-container">
+          <img src={whatsapp_icon} alt="whatsapp" />
+        </div>
+      </div>
+
+      <div className="footer-copyright">
+        <hr />
+        <p>© {new Date().getFullYear()} - All Rights Reserved.</p>
+      </div>
+    </div>
+  );
+};
+
+export default Footer;

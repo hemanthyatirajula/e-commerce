@@ -1,0 +1,76 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  background: #f3f3f3;
+  padding: 60px 20px 20px 20px;
+  margin-top: 60px;
+}
+
+.footer-logo img {
+  height: 60px;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
+  padding-left: 30%;
+}
+
+.footer-logo p {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 8px;
+  align-items: center;
+
+}
+
+.footer-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #444;
+}
+
+.footer-links li {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.footer-links li:hover {
+  color: #ff4141;
+}
+
+.footer-social-icon {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-icons-container {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  overflow: hidden;           /* ✅ Hide overflow to force circle crop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.footer-icons-container:hover {
+  transform: scale(1.1);
+}
+
+.footer-icons-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* ✅ Ensures image fills entire circle */
+  border-radius: 50%;         /* ✅ Ensures circular crop */
+}

@@ -1,0 +1,70 @@
+.new-collections {
+  padding: 40px 60px;
+  background-color: #f6f6f6;
+}
+
+.new-collections h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #171717;
+  margin-bottom: 10px;
+  align-items: center;
+  text-align: center;
+
+}
+
+.new-collections hr {
+  width: 160px;
+  height: 4px;
+  background-color: #ff4141;
+  border: none;
+  margin-bottom: 40px;
+}
+
+.collections {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* ✅ Exactly 4 items in a row */
+  gap: 25px;
+}
+
+/* Optional item styling if not in Item.css */
+.collection-item {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.collection-item:hover {
+  transform: translateY(-5px);
+}
+
+.collection-item img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.collection-item p {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.item-prices {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-price-new {
+  color: #ff4141;
+  font-weight: 600;
+}
+
+.item-price-old {
+  color: #777;
+  text-decoration: line-through;
+}
+

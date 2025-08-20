@@ -1,0 +1,38 @@
+/* === Main Popular Section === */
+.popular {
+  padding: 40px 20px;
+   background: linear-gradient(to bottom,ffff,#e9fae3 );
+}
+
+/* === Title === */
+.popular h1 {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+/* === Title Underline === */
+.popular hr {
+  width: 80px;
+  height: 3px;
+  background-color: #d10024;
+  border: none;
+  margin: 0 auto 30px;
+  border-radius: 4px;
+}
+
+/* === Items Grid === */
+.popular-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 0 10px;
+}
+
+
+
+
