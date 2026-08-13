@@ -3,8 +3,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const multer = require("multer");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
 const cors = require("cors");
 
 
@@ -15,11 +16,9 @@ app.use(express.json());
 app.use(cors());
 
 // ✅ Connect to MongoDB
-mongoose.connect(
-  "mongodb+srv://hemanthyatirajula05:Surodamma12345@hemanth.w65r96m.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Hemanth"
-)
-.then(() => console.log("✅ Connected to MongoDB"))
-.catch((err) => console.error("❌ MongoDB Connection Error:", err));
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // ✅ Base route
 app.get("/", (req, res) => {
@@ -27,32 +26,53 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Setup Multer for file uploads
-const storage = multer.diskStorage({
-  destination: './upload/images',
-  filename: (req, file, cb) => {
-         return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const upload = multer({ storage });
-
-// ✅ Serve static images from /images route
-app.use('/images', express.static('upload/images'));
-
-// ✅ Image upload route with error check
-// image field should be named 'product'
-// Upload a single image (field name must be 'product')
-app.post("/upload", upload.single('product'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ success: 0, message: "No file uploaded" });
-  }
-
-  res.json({
-    success: 1,
-    image_url: `http://localhost:${port}/images/${req.file.filename}`
-  });
+const upload = multer({
+  storage: multer.memoryStorage(),
 });
 
+app.post("/upload", upload.single("product"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: 0,
+        message: "No file uploaded",
+      });
+    }
+
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "e-commerce",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+
+      stream.end(req.file.buffer);
+    });
+
+    res.json({
+      success: 1,
+      image_url: result.secure_url,
+    });
+
+  } catch (error) {
+    console.error("Cloudinary upload error:", error);
+
+    res.status(500).json({
+      success: 0,
+      message: "Image upload failed",
+    });
+  }
+});
 
 // Add a product to MongoDB
 app.post('/addproduct', async (req, res) => {
@@ -158,7 +178,7 @@ app.post('/signup',async(req,res)=>{
     }
    }
 
-   const token = jwt.sign(data,'secret_ecom');
+   const token = jwt.sign(data, process.env.JWT_SECRET);
    res.json({success:true,token})
 })
 
@@ -173,7 +193,7 @@ app.post('/login',async (req,res)=>{
           id:user.id
         }
       }
-      const token = jwt.sign(data,'secret_ecom');
+      const token = jwt.sign(data, process.env.JWT_SECRET);
       res.json({success:true,token});
     }
     else{
