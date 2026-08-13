@@ -1,5 +1,5 @@
 import React from 'react'
-import './sidebar.css'
+import './Sidebar.css'
 import {Link} from 'react-router-dom'
 import add_product_icon from '../../assets/Product_cart.jpg'
 import list_product_icon from '../../assets/Product_list.jpg'
