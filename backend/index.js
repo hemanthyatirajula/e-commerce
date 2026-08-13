@@ -15,12 +15,11 @@ app.use(express.json());
 app.use(cors());
 
 // ✅ Connect to MongoDB
-mongoose.connect("mongodb+srv://hemanthyatirajula05:Hemanth143@hemanth.w65r96m.mongodb.net/e-commerce", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+mongoose.connect(
+  "mongodb+srv://hemanthyatirajula05:Surodamma12345@hemanth.w65r96m.mongodb.net/e-commerce?retryWrites=true&w=majority&appName=Hemanth"
+)
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // ✅ Base route
 app.get("/", (req, res) => {
@@ -253,6 +252,10 @@ const OrderSchema = new mongoose.Schema({
 // });
 
 app.post('/placeorder', async (req, res) => {
+
+  console.log("========== PLACE ORDER ==========");
+  console.log(req.body);
+
   try {
     const { user, items, totalAmount, paymentMethod, paymentId } = req.body;
 
