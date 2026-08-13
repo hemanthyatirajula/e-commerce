@@ -6,7 +6,11 @@ import cart_icon from '../Assets/cart_icon.png';
 import { ShopContext } from '../Context/ShopContext';
 
 const Navbar = () => {
-  const { getTotalCartItems } = useContext(ShopContext);
+  const {
+  getTotalCartItems,
+  searchQuery,
+  setSearchQuery,
+  } = useContext(ShopContext);
   const [mobileMenu, setMobileMenu] = useState(false);
   const location = useLocation();
 
@@ -48,6 +52,16 @@ const Navbar = () => {
           </Link>
         ))}
       </div>
+
+
+        <div className="nav-search">
+  <input
+    type="text"
+    placeholder="Search products..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />
+  </div>
 
       {/* Login, Cart & Hamburger */}
       <div className="nav-login-cart">

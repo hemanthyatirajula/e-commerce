@@ -5,7 +5,7 @@ import Item from '../components/Item/Item';
 import dropdown_icon from '../components/Assets/dropdown_icon.jpg';
 
 export const ShopCategory = (props) => {
-  const { all_products } = useContext(ShopContext); 
+  const { filteredProducts } = useContext(ShopContext);
 
   return (
     <div className="shop-category">
@@ -21,23 +21,21 @@ export const ShopCategory = (props) => {
       </div>
 
       <div className="shopcategory-products">
-        {all_products.map((item, i) => {
-          console.log("Matching?", props.category, item.category);
-          if (props.category.toLowerCase() === item.category.toLowerCase()) {
-            return (
-              <Item
-                key={i}
-                id={item.id}
-                name={item.name}
-                image={item.image}
-                new_price={item.new_price}
-                old_price={item.old_price}
-              />
-            );
-          } else {
-            return null;
-          }
-        })}
+          {filteredProducts
+          .filter(
+          (item) =>
+          props.category.toLowerCase() === item.category.toLowerCase()
+          )
+         .map((item) => (
+        <Item
+         key={item.id}
+          id={item.id}
+          name={item.name}
+          image={item.image}
+          new_price={item.new_price}
+          old_price={item.old_price}
+           />
+  ))}
       </div>
     </div>
   );

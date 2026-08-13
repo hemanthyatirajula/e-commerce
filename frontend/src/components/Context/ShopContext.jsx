@@ -7,10 +7,11 @@ const ShopContext = createContext(null);
 const ShopContextProvider = (props) => {
 
 const [all_products, setAll_products] = useState([]);
+const [searchQuery, setSearchQuery] = useState("");
 const [cartItems, setCartItems] = useState({});
 
 useEffect(() => {
-  fetch('http://localhost:4000/allproducts')
+  fetch('https://e-commerce-backend-ten-khaki.vercel.app/allproducts')
     .then(res => res.json())
     .then(data => setAll_products(data));
 }, []);
@@ -100,7 +101,7 @@ const orderData = {
 };
 
       try {
-        await axios.post("http://localhost:4000/placeorder", orderData);
+        await axios.post("https://e-commerce-backend-ten-khaki.vercel.app/placeorder", orderData);
         alert("🧾 Order placed successfully!");
       } catch (err) {
         console.error("❌ Failed to save order:", err);
@@ -153,15 +154,27 @@ const orderData = {
      }
      return totalItem;
   }
-  const contextValue = {
-    getTotalCartItems,
-    getTotalCartAmount,
-    all_products,
-    cartItems,
-    addToCart,
-    removeFromCart,
-    handleBuyNow
-  };
+
+
+const filteredProducts = all_products.filter((product) =>
+  product.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+
+
+
+const contextValue = {
+  getTotalCartItems,
+  getTotalCartAmount,
+  all_products,
+  filteredProducts,
+  searchQuery,
+  setSearchQuery,
+  cartItems,
+  addToCart,
+  removeFromCart,
+  handleBuyNow
+};
 
   return (
     <ShopContext.Provider value={contextValue}>

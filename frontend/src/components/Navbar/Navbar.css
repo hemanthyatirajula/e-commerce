@@ -75,6 +75,25 @@
   width: 100%;
 }
 
+.nav-search{
+    display:flex;
+    align-items:center;
+}
+
+.nav-search input{
+    width:250px;
+    height:40px;
+    border:1px solid #ddd;
+    border-radius:25px;
+    padding:0 15px;
+    outline:none;
+    font-size:15px;
+}
+
+.nav-search input:focus{
+    border-color:#ff4141;
+}
+
 /* === Login & Cart === */
 .nav-login-cart {
   display: flex;
