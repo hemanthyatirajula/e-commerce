@@ -1,12 +1,11 @@
-import React,{useState}  from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import Breadcrum from '../components/Breadcrums/Breadcrum';
-import all_products from '../components/Assets/all_products'
  import { ShopContext } from '../components/Context/ShopContext';
 import ProductDisplay from '../components/ProductDisplay/ProductDisplay';
 import DescriptionBox from '../components/DescriptionBox/DescriptionBox';
 import { RelatedProducts } from '../components/RelatedProducts/RelatedProducts';
-import { useContext } from 'react';
+
 
 export const Product = () => {
   const { productID } = useParams();
