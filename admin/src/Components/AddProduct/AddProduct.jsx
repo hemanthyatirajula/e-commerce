@@ -22,7 +22,7 @@
 //     formData.append("product", file);
 
 //     try {
-//       const response = await fetch("http://localhost:4000/upload", {
+//       const response = await fetch("https://e-commerce-backend-ten-khaki.vercel.app/upload", {
 //         method: "POST",
 //         body: formData,
 //       });
@@ -52,7 +52,7 @@
 //     }
 
 //     try {
-//       const response = await fetch("http://localhost:4000/addproduct", {
+//       const response = await fetch("https://e-commerce-backend-ten-khaki.vercel.app/addproduct", {
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/json",
@@ -186,7 +186,7 @@ const AddProduct = () => {
     formData.append("product", file);
 
     try {
-      const response = await fetch("http://localhost:4000/upload", {
+      const response = await fetch("https://e-commerce-backend-ten-khaki.vercel.app/upload", {
         method: "POST",
         body: formData,
       });
@@ -217,7 +217,7 @@ const AddProduct = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/addproduct", {
+      const response = await fetch("https://e-commerce-backend-ten-khaki.vercel.app/addproduct", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

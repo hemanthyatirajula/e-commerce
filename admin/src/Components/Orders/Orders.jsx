@@ -8,7 +8,7 @@ const Orders = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/allorders")
+      .get("https://e-commerce-backend-ten-khaki.vercel.app/allorders")
       .then((res) => {
         setOrders(res.data);
         setLoading(false);
