@@ -1,22 +1,40 @@
-import React from 'react'
-import './Popular.css'
-import data_product from '../Assets/data'
-import Item from '../Item/Item'
-export const Popular = () => {
+import React, { useEffect, useState } from "react";
+import "./Popular.css";
+import Item from "../Item/Item";
+
+const Popular = () => {
+  const [popularProducts, setPopularProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("https://e-commerce-backend-ten-khaki.vercel.app/allproducts")
+      .then((res) => res.json())
+      .then((data) => {
+        const womenProducts = data
+          .filter((item) => item.category === "womens")
+          .slice(0, 4);
+
+        setPopularProducts(womenProducts);
+      });
+  }, []);
+
   return (
     <div className="popular">
-        <h1>POPULAR IN WOMEN</h1>
-        <hr/>
-    <div className="popular-item">
-        {data_product.map((item,i)=>{
-            return<Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price}/>
-        
-
-})}
+      <h1>POPULAR IN WOMEN</h1>
+      <hr />
+      <div className="popular-item">
+        {popularProducts.map((item) => (
+          <Item
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            image={item.image}
+            new_price={item.new_price}
+            old_price={item.old_price}
+          />
+        ))}
+      </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-
-export default Popular
+export default Popular;
