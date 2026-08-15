@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ListProduct.css";
 
-const API_URL = "http://localhost:4000";
+const API_URL = "https://e-commerce-backend-ten-khaki.vercel.app";
 
 const ListProduct = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -30,12 +30,8 @@ const ListProduct = () => {
       return;
     }
 
-    const url = `${API_URL}/removeproduct`;
-    console.log("DELETE URL:", url);
-    console.log("DELETE payload:", { id });
-
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${API_URL}/removeproduct`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,27 +39,14 @@ const ListProduct = () => {
         body: JSON.stringify({ id }),
       });
 
-      console.log("DELETE status:", response.status);
-
-      const text = await response.text();
-      console.log("DELETE response text:", text);
-
-      let data = {};
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch (error) {
-          console.error("Response is not valid JSON:", text);
-          throw new Error("Backend returned HTML instead of JSON.");
-        }
-      }
+      const data = await response.json();
 
       if (!response.ok || data?.success === false) {
         throw new Error(data?.message || `Delete failed: ${response.status}`);
       }
 
       setAllProducts((prevProducts) =>
-        prevProducts.filter((product) => product.id !== id)
+        prevProducts.filter((product) => (product._id || product.id) !== id)
       );
 
       alert("Product removed successfully.");
@@ -92,7 +75,7 @@ const ListProduct = () => {
 
           <tbody>
             {allProducts.map((product) => {
-              const productId = product.id;
+              const productId = product._id || product.id;
 
               return (
                 <tr key={productId}>
