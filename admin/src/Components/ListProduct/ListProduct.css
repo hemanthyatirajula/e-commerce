@@ -103,3 +103,149 @@
     font-size: 20px;
   }
 }
+
+.listproduct {
+  width: 100%;
+  max-width: 100%;
+  height: calc(100vh - 120px);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.listproduct-header {
+  background: transparent;
+  padding: 0 0 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.listproduct h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.03em;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 100%;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  max-height: calc(100vh - 180px);
+  box-sizing: border-box;
+}
+
+.product-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.product-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.product-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #eef2f7;
+  color: #374151;
+  font-size: 0.95rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.product-table tbody tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+.product-table tbody tr:hover {
+  background: #f3f8ff;
+  transition: background 0.2s ease;
+}
+
+.product-image-cell {
+  width: 110px;
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  display: block;
+}
+
+.product-name-cell {
+  max-width: 260px;
+}
+
+.product-name {
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.remove-btn {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.remove-btn:hover {
+  background: #fee2e2;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .listproduct {
+    height: calc(100vh - 100px);
+  }
+
+  .listproduct h1 {
+    font-size: 1.6rem;
+  }
+
+  .product-table thead th,
+  .product-table tbody td {
+    padding: 10px 10px;
+    font-size: 0.82rem;
+  }
+
+  .product-image {
+    width: 72px;
+    height: 72px;
+  }
+}

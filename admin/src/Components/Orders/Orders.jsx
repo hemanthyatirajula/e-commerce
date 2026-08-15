@@ -1,91 +1,135 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./Orders.css";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const formatDate = (value) => {
+    if (!value) return "—";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "—";
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const truncateId = (id) => {
+    if (!id) return "—";
+    return id.length > 12 ? `${id.slice(0, 12)}...` : id;
+  };
+
   useEffect(() => {
-    axios
-      .get("https://e-commerce-backend-ten-khaki.vercel.app/allorders")
-      .then((res) => {
-        setOrders(res.data);
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/allorders");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setOrders(Array.isArray(data) ? data : data.orders || []);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setOrders([]);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching orders:", err);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchOrders();
   }, []);
 
-  return (
-    <div className="orders">
-      <h2>🧾 All Orders</h2>
-
-      {loading ? (
+  if (loading) {
+    return (
+      <div className="orders-page">
+        <h2>All Orders</h2>
         <p>Loading orders...</p>
-      ) : orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : (
-        <div className="orders-table-container">
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>User</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>Items</th>
-                <th>Total (₹)</th>
-                <th>Shipping</th>
-                <th>Discount</th>
-                <th>Coupon</th>
-                <th>Payment</th>
-                <th>Status</th>
-                <th>Order Time</th>
-                <th>Delivery Date</th>
-                <th>Delivered?</th>
-                <th>Delivery Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id.slice(-6)}</td>
-                  <td>{order.user?.name}</td>
-                  <td>
-                    📧 {order.user?.email}
-                    <br />
-                    📞 {order.user?.phone}
-                  </td>
-                  <td>
-                    {order.address?.street}, {order.address?.city},<br />
-                    {order.address?.state} - {order.address?.pincode}
-                  </td>
-                  <td>
-                    {order.items.map((item, index) => (
-                      <div key={index}>
-                        {item.name} × {item.quantity} = ₹{item.price * item.quantity}
-                      </div>
-                    ))}
-                  </td>
-                  <td>₹{order.totalAmount}</td>
-                  <td>₹{order.shippingCharge || 0}</td>
-                  <td>₹{order.discountAmount || 0}</td>
-                  <td>{order.couponCode || "—"}</td>
-                  <td>{order.paymentMethod} <br />🆔 {order.paymentId}</td>
-                  <td>{order.status}</td>
-                  <td>{order.orderTime}</td>
-                  <td>{order.deliveryDate}</td>
-                  <td>{order.isDelivered ? "✅ Yes" : "❌ No"}</td>
-                  <td>{order.deliveryTime || "—"}</td>
+      </div>
+    );
+  }
+
+  return (
+    <div className="orders-page">
+      <div className="orders-header">
+        <h2>All Orders</h2>
+      </div>
+
+      <div className="orders-card">
+        <div className="table-container">
+          {orders.length === 0 ? (
+            <p className="orders-empty">No orders found.</p>
+          ) : (
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer Name</th>
+                  <th>Phone</th>
+                  <th>Items Count</th>
+                  <th>Total Amount</th>
+                  <th>Payment Method</th>
+                  <th>Payment Status</th>
+                  <th>Order Date</th>
+                  <th>Delivery Date</th>
+                  <th>Delivery Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {orders.map((order) => {
+                  const customerName = order.user?.name || "Unknown";
+                  const phone = order.user?.phone || "—";
+                  const itemsCount = Array.isArray(order.items) ? order.items.length : 0;
+                  const totalAmount = Number(order.totalAmount || 0);
+                  const paymentStatus = order.status || "Pending";
+                  const deliveryStatus = order.isDelivered ? "Delivered" : "Pending";
+
+                  return (
+                    <tr key={order._id}>
+                      <td className="order-id-cell">{truncateId(order._id)}</td>
+                      <td>{customerName}</td>
+                      <td>{phone}</td>
+                      <td>{itemsCount}</td>
+                      <td>₹{totalAmount.toLocaleString("en-IN")}</td>
+                      <td>{order.paymentMethod || "—"}</td>
+                      <td>
+                        <span
+                          className={`status-badge ${
+                            paymentStatus === "Success"
+                              ? "success"
+                              : paymentStatus === "Failed"
+                              ? "failed"
+                              : "pending"
+                          }`}
+                        >
+                          {paymentStatus}
+                        </span>
+                      </td>
+                      <td>{formatDate(order.orderTime)}</td>
+                      <td>{formatDate(order.deliveryDate)}</td>
+                      <td>
+                        <span
+                          className={`status-badge ${
+                            deliveryStatus === "Delivered"
+                              ? "success"
+                              : deliveryStatus === "Pending"
+                              ? "pending"
+                              : "failed"
+                          }`}
+                        >
+                          {deliveryStatus}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

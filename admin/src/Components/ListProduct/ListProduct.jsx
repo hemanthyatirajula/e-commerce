@@ -1,61 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import './ListProduct.css';
-import cross_icon from '../../assets/remove_icon.jpg';
+import React, { useEffect, useState } from "react";
+import "./ListProduct.css";
+
+const API_URL = "http://localhost:4000";
 
 const ListProduct = () => {
-  const [allproducts, setAllProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
   const fetchInfo = async () => {
-    await fetch('https://e-commerce-backend-ten-khaki.vercel.app/allproducts')
-      .then((res) => res.json())
-      .then((data) => {
-        setAllProducts(data);
-      });
+    try {
+      const response = await fetch(`${API_URL}/allproducts`);
+      if (!response.ok) {
+        throw new Error(`Fetch failed: ${response.status}`);
+      }
+      const data = await response.json();
+      setAllProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   useEffect(() => {
     fetchInfo();
   }, []);
-  
-const remove_product = async (id) => {
-  await fetch('https://e-commerce-backend-ten-khaki.vercel.app/removeproduct', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ id: id }),
-  });
-  await fetchInfo(); // Refresh the product list
-};
 
+  const removeProduct = async (id) => {
+    if (!id) {
+      console.error("Missing product id");
+      alert("Product id not found.");
+      return;
+    }
 
+    const url = `${API_URL}/removeproduct`;
+    console.log("DELETE URL:", url);
+    console.log("DELETE payload:", { id });
 
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
 
+      console.log("DELETE status:", response.status);
+
+      const text = await response.text();
+      console.log("DELETE response text:", text);
+
+      let data = {};
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (error) {
+          console.error("Response is not valid JSON:", text);
+          throw new Error("Backend returned HTML instead of JSON.");
+        }
+      }
+
+      if (!response.ok || data?.success === false) {
+        throw new Error(data?.message || `Delete failed: ${response.status}`);
+      }
+
+      setAllProducts((prevProducts) =>
+        prevProducts.filter((product) => product.id !== id)
+      );
+
+      alert("Product removed successfully.");
+    } catch (error) {
+      console.error("Remove product error:", error);
+      alert(`Failed to remove product. Please try again.\n${error.message}`);
+    }
+  };
 
   return (
-    <div className='list-product'>
+    <div className="listproduct">
       <h1>All Product</h1>
-      <div className="listproduct-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Old Price</p>
-        <p>New Price</p>
-        <p>Category</p>
-        <p>Remove</p>
-      </div>
-      <div className="listproduct-allproducts">
-        <hr />
-        {allproducts.map((product, index) => (
-          <div key={index} className="listproduct-format-main listproduct-format">
-            <img src={product.image} alt="" className='listproduct-product-image' />
-            <p>{product.name}</p>
-            <p>${product.old_price}</p>
-            <p>${product.new_price}</p>
-            <p>{product.category}</p>
-            <img onClick={()=>{remove_product(product.id)}}className='listproduct-remove-icon' src={cross_icon} alt="" />
-          </div>
-        ))}
+
+      <div className="table-container">
+        <table className="product-table">
+          <thead>
+            <tr>
+              <th>Products</th>
+              <th>Title</th>
+              <th>Old Price</th>
+              <th>New Price</th>
+              <th>Category</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {allProducts.map((product) => {
+              const productId = product.id;
+
+              return (
+                <tr key={productId}>
+                  <td className="product-image-cell">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="product-image"
+                    />
+                  </td>
+
+                  <td className="product-name-cell">
+                    <span className="product-name">{product.name}</span>
+                  </td>
+
+                  <td>₹{product.old_price}</td>
+                  <td>₹{product.new_price}</td>
+                  <td>{product.category}</td>
+
+                  <td>
+                    <button
+                      className="remove-btn"
+                      onClick={() => removeProduct(productId)}
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
